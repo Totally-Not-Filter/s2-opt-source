@@ -13972,23 +13972,27 @@ InitCameraValues:
 ; off_C296:
 InitCam_Index: zoneOrderedOffsetTable 2,1
 	zoneOffsetTableEntry.w InitCam_EHZ_HTZ	; EHZ
-	zoneOffsetTableEntry.w InitCam_Null0	; Zone 1
+	zoneOffsetTableEntry.w InitCam_Null	; Zone 1
 	zoneOffsetTableEntry.w InitCam_WZ	; WZ
-	zoneOffsetTableEntry.w InitCam_Null0	; Zone 3
+	zoneOffsetTableEntry.w InitCam_Null	; Zone 3
 	zoneOffsetTableEntry.w InitCam_Std	; MTZ1,2
 	zoneOffsetTableEntry.w InitCam_Std	; MTZ3
-	zoneOffsetTableEntry.w InitCam_Null1	; WFZ
+	zoneOffsetTableEntry.w InitCam_Null	; WFZ
 	zoneOffsetTableEntry.w InitCam_EHZ_HTZ	; HTZ
 	zoneOffsetTableEntry.w InitCam_HPZ	; HPZ
-	zoneOffsetTableEntry.w InitCam_Null2	; Zone 9
+	zoneOffsetTableEntry.w InitCam_Null	; Zone 9
 	zoneOffsetTableEntry.w InitCam_OOZ	; OOZ
 	zoneOffsetTableEntry.w InitCam_MCZ	; MCZ
 	zoneOffsetTableEntry.w InitCam_CNZ	; CNZ
 	zoneOffsetTableEntry.w InitCam_CPZ	; CPZ
-	zoneOffsetTableEntry.w InitCam_Null3	; DEZ
+	zoneOffsetTableEntry.w InitCam_Null	; DEZ
 	zoneOffsetTableEntry.w InitCam_ARZ	; ARZ
 	zoneOffsetTableEntry.w InitCam_SCZ	; SCZ
     zoneTableEnd
+; ===========================================================================
+; wtf:
+InitCam_Null:
+	rts
 ; ===========================================================================
 ;loc_C2B8:
 InitCam_EHZ_HTZ:
@@ -14007,12 +14011,6 @@ InitCam_EHZ_HTZ:
 	move.l	d0,(Camera_BG3_Y_pos_P2).w
 	rts
 ; ===========================================================================
-; wtf:
-InitCam_Null0:
-    if gameRevision=0
-	rts
-    endif
-; ===========================================================================
 ; Wood_Zone_BG:
 InitCam_WZ:
     if gameRevision=0
@@ -14030,10 +14028,6 @@ InitCam_Std:
 	move.w	d0,(Camera_BG_Y_pos).w
 	asr.w	#3,d1
 	move.w	d1,(Camera_BG_X_pos).w
-	rts
-; ===========================================================================
-;return_C2F2:
-InitCam_Null1:
 	rts
 ; ===========================================================================
 ; Hidden_Palace_Zone_BG:
@@ -14060,11 +14054,6 @@ InitCam_HPZ:
 	clr.l	(Camera_BG_X_pos).w
 	rts
     endif
-
-; ===========================================================================
-;return_C320:
-InitCam_Null2:
-	rts
 ; ===========================================================================
 ;loc_C322:
 InitCam_OOZ:
@@ -14113,10 +14102,6 @@ InitCam_CPZ:
 	move.w	d1,(Camera_BG_X_pos).w
 	rts
 ; ===========================================================================
-;return_C38A:
-InitCam_Null3:
-	rts
-; ===========================================================================
 ;loc_C38C:
 InitCam_ARZ:
 	tst.b	(Current_Act).w
@@ -14157,18 +14142,18 @@ DeformBgLayer:
 ; ---------------------------------------------------------------------------
 +
 	moveq	#0,d0
-	move.w	d0,(Scroll_flags).w
-	move.w	d0,(Scroll_flags_BG).w
-	move.w	d0,(Scroll_flags_BG2).w
-	move.w	d0,(Scroll_flags_BG3).w
-	move.w	d0,(Scroll_flags_P2).w
-	move.w	d0,(Scroll_flags_BG_P2).w
-	move.w	d0,(Scroll_flags_BG2_P2).w
-	move.w	d0,(Scroll_flags_BG3_P2).w
-	move.w	d0,(Camera_X_pos_diff).w
-	move.w	d0,(Camera_Y_pos_diff).w
-	move.w	d0,(Camera_X_pos_diff_P2).w
-	move.w	d0,(Camera_Y_pos_diff_P2).w
+	move.l	d0,(Scroll_flags).w
+;	move.w	d0,(Scroll_flags_BG).w
+	move.l	d0,(Scroll_flags_BG2).w
+;	move.w	d0,(Scroll_flags_BG3).w
+	move.l	d0,(Scroll_flags_P2).w
+;	move.w	d0,(Scroll_flags_BG_P2).w
+	move.l	d0,(Scroll_flags_BG2_P2).w
+;	move.w	d0,(Scroll_flags_BG3_P2).w
+	move.l	d0,(Camera_X_pos_diff).w
+;	move.w	d0,(Camera_Y_pos_diff).w
+	move.l	d0,(Camera_X_pos_diff_P2).w
+;	move.w	d0,(Camera_Y_pos_diff_P2).w
 
 	; Sky Chase Zone handles scrolling manually, in 'SwScrl_SCZ'.
 	cmpi.b	#sky_chase_zone,(Current_Zone).w
@@ -49072,8 +49057,8 @@ Obj40_Init:
 Obj40_Main:
 	lea	Ani_obj40(pc),a1
 	jsrto	JmpTo6_AnimateSprite
-	move.w	#$27,d1
-	move.w	#8,d2
+	moveq	#$27,d1
+	moveq	#8,d2
 	move.w	x_pos(a0),d4
 	lea	Obj40_SlopeData_DiagUp(pc),a2
 	tst.b	mapping_frame(a0)
@@ -51236,7 +51221,7 @@ Obj6B_Type_Immobile:
 ; ===========================================================================
 
 loc_27E68:
-	move.w	#$40,d1
+	moveq	#$40,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+8).w,d0
 	bra.s	+
@@ -51259,7 +51244,7 @@ loc_27E74:
 ; ===========================================================================
 
 loc_27E96:
-	move.w	#$40,d1
+	moveq	#$40,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+8).w,d0
 	bra.s	loc_27EAC
@@ -51340,7 +51325,7 @@ return_27F4C:
 ; ===========================================================================
 
 loc_27F4E:
-	move.w	#$10,d1
+	moveq	#$10,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+$28).w,d0
 	lsr.w	#1,d0
@@ -51349,7 +51334,7 @@ loc_27F4E:
 ; ===========================================================================
 
 loc_27F60:
-	move.w	#$30,d1
+	moveq	#$30,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+$2C).w,d0
 	move.w	(Oscillating_Data+$2E).w,d3
@@ -51357,7 +51342,7 @@ loc_27F60:
 ; ===========================================================================
 
 loc_27F70:
-	move.w	#$50,d1
+	moveq	#$50,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+$30).w,d0
 	move.w	(Oscillating_Data+$32).w,d3
@@ -51365,7 +51350,7 @@ loc_27F70:
 ; ===========================================================================
 
 loc_27F80:
-	move.w	#$70,d1
+	moveq	#$70,d1
 	moveq	#0,d0
 	move.b	(Oscillating_Data+$34).w,d0
 	move.w	(Oscillating_Data+$36).w,d3
@@ -51483,7 +51468,8 @@ Obj6C_Init:
 	move.w	(a2)+,objoff_38(a0)
 	move.l	a2,objoff_3C(a0)
 	andi.w	#$F,d1
-	lsl.w	#2,d1
+	add.w	d1,d1
+	add.w	d1,d1
 	move.b	d1,objoff_38(a0)
 	move.b	#4,objoff_3A(a0)
 	btst	#status.npc.x_flip,status(a0)
