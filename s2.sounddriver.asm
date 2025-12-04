@@ -410,28 +410,32 @@ zUpdateEverything:
 	ld	ix,zTracksSFXStart-zTrack.len
 
 	; FM SFX channels
-	ld	b,SFX_FM_TRACK_COUNT		; Only 3 FM channels for SFX (FM3, FM4, FM5)
+;	ld	b,SFX_FM_TRACK_COUNT		; Only 3 FM channels for SFX (FM3, FM4, FM5)
 
-.fmloop:
+;.fmloop:
+	rept SFX_FM_TRACK_COUNT
 	push	bc
 	ld	de,zTrack.len			; Spacing between tracks
 	add	ix,de				; Next track
 	bit	7,(ix+zTrack.PlaybackControl)	; Is it playing?
 	call	nz,zFMUpdateTrack		; If it is, go update it
 	pop	bc
-	djnz	.fmloop
+	endm
+;	djnz	.fmloop
 
 	; PSG SFX channels
-	ld	b,SFX_PSG_TRACK_COUNT		; All PSG channels available
+;	ld	b,SFX_PSG_TRACK_COUNT		; All PSG channels available
 
-.psgloop:
+;.psgloop:
+	rept SFX_PSG_TRACK_COUNT
 	push	bc
 	ld	de,zTrack.len			; Spacing between tracks
 	add	ix,de				; Next track
 	bit	7,(ix+zTrack.PlaybackControl)	; Is it playing?
 	call	nz,zPSGUpdateTrack		; If it is, go update it
 	pop	bc
-	djnz	.psgloop
+	endm
+;	djnz	.psgloop
 
 	; Now we update the DAC... this only does anything if there's a new DAC
 	; sound to be played.  This is called after updating the DAC track.
@@ -498,27 +502,31 @@ zUpdateMusic:
 	call	nz,zDACUpdateTrack		; If so, zDACUpdateTrack
 	xor	a				; Clear a
 	ld	(zAbsVar.DACUpdating),a		; Store 0 to DACUpdating
-	ld	b,MUSIC_FM_TRACK_COUNT		; Loop 6 times (FM)...
+;	ld	b,MUSIC_FM_TRACK_COUNT		; Loop 6 times (FM)...
 
-.fmloop:
+;.fmloop:
+	rept MUSIC_FM_TRACK_COUNT
 	push	bc
 	ld	de,zTrack.len			; Space between tracks
 	add	ix,de				; Go to next track
 	bit	7,(ix+zTrack.PlaybackControl)	; Is bit 7 (80h) set on playback control byte? (means "is playing")
 	call	nz,zFMUpdateTrack		; If so...
 	pop	bc
-	djnz	.fmloop
+	endm
+;	djnz	.fmloop
 
-	ld	b,MUSIC_PSG_TRACK_COUNT		; Loop 3 times (PSG)...
+;	ld	b,MUSIC_PSG_TRACK_COUNT		; Loop 3 times (PSG)...
 
-.psgloop:
+;.psgloop:
+	rept MUSIC_PSG_TRACK_COUNT
 	push	bc
 	ld	de,zTrack.len			; Space between tracks
 	add	ix,de				; Go to next track
 	bit	7,(ix+zTrack.PlaybackControl)	; Is this track playing?
 	call	nz,zPSGUpdateTrack		; If so...
 	pop	bc
-	djnz	.psgloop
+	endm
+;	djnz	.psgloop
 ; End of function zUpdateMusic
 
 
