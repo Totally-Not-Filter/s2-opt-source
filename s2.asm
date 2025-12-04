@@ -48765,7 +48765,6 @@ loc_25BF6:
 	movea.l	mappings(a0),a3
 	adda.w	(a3,d0.w),a3
 	move.w	(a3)+,d1
-	subq.w	#1,d1
 	bset	#render_flags.static_mappings,render_flags(a0)
 	_move.b	id(a0),d4
 	move.b	render_flags(a0),d5
