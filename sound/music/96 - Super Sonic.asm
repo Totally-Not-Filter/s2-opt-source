@@ -183,8 +183,6 @@ Supersonic_Call06:
 
 ; PSG2 Data
 Supersonic_PSG2:
-	smpsStop
-
 ; PSG3 Data
 Supersonic_PSG3:
 	smpsStop

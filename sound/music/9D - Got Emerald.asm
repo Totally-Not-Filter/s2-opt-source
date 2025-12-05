@@ -61,8 +61,7 @@ Emerald_Loop01:
 
 ; PSG1 Data
 Emerald_PSG1:
-	smpsNop             $01
-	dc.b	nRst, $02, nRst, $2D
+	dc.b	nRst, $2F
 
 Emerald_Loop00:
 	dc.b	nG5, $06, nF5, nE5, nD5
@@ -73,7 +72,6 @@ Emerald_Loop00:
 Emerald_DAC:
 ; PSG3 Data
 Emerald_PSG3:
-	smpsNop             $01
 	smpsStop
 
 Emerald_Voices:

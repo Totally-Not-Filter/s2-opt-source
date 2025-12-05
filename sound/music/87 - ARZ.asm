@@ -276,9 +276,6 @@ ARZ_Loop0A:
 	dc.b	nRst, $2A
 	smpsJump            ARZ_Jump05
 
-	; Unreachable
-	smpsStop
-
 ; PSG2 Data
 ARZ_PSG2:
 	dc.b	nRst, $0C

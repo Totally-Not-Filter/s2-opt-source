@@ -12035,7 +12035,7 @@ TextOptScr_SonicAlone:		menutxt	"SONIC ALONE    "	; byte_97FC:
 TextOptScr_MilesAlone:		menutxt	"MILES ALONE    "	; byte_980C:
 TextOptScr_TailsAlone:		menutxt	"TAILS ALONE    "	; byte_981C:
 TextOptScr_VsModeItems:		menutxt	"* VS MODE ITEMS *"	; byte_982C:
-TextOptScr_AllKindsItems:	menutxt	"ALL KINDS ITEMS"	; byte_983E:
+TextOptScr_AllKindsItems:	menutxt	"ALL ITEM KINDS"	; byte_983E:
 TextOptScr_TeleportOnly:	menutxt	"TELEPORT ONLY  "	; byte_984E:
 TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
 TextOptScr_0:			menutxt	"      00       "	; byte_9870:

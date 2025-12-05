@@ -25,11 +25,11 @@ MTZ_PSG2:
 
 ; FM1 Data
 MTZ_FM1:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, MTZ_FM1
 
 MTZ_Loop09:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, MTZ_Loop09
 	smpsAlterPitch      $0C
 	smpsSetvoice        $03
@@ -123,11 +123,11 @@ MTZ_Jump02:
 	smpsModSet          $06, $01, $02, $04
 
 MTZ_Loop0B:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, MTZ_Loop0B
 
 MTZ_Loop0C:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $07, MTZ_Loop0C
 
 MTZ_Loop0D:
@@ -137,7 +137,7 @@ MTZ_Loop0D:
 	smpsLoop            $00, $02, MTZ_Loop0D
 
 MTZ_Loop0E:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $09, MTZ_Loop0E
 	smpsJump            MTZ_Loop0C
 

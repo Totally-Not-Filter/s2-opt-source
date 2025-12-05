@@ -16,8 +16,6 @@ CPZ_Header:
 
 ; PSG1 Data
 CPZ_PSG1:
-	smpsStop
-
 ; PSG2 Data
 CPZ_PSG2:
 	smpsStop
@@ -143,7 +141,7 @@ CPZ_Call01:
 CPZ_FM1:
 	smpsModSet          $06, $01, $FA, $04
 	smpsCall            CPZ_Call05
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsCall            CPZ_Call05
 	dc.b	nRst, $30
 	smpsCall            CPZ_Call06
@@ -218,10 +216,10 @@ CPZ_Loop0D:
 
 CPZ_Loop0E:
 	dc.b	nAb5, $12, nRst, $06, nAb5, $12, nRst, $06, nA5, $0C, nRst, $24
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, CPZ_Loop0E
 	smpsModSet          $0C, $01, $05, $04
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsSetvoice        $05
 	smpsAlterVol        $F8
 
@@ -254,12 +252,12 @@ CPZ_Loop09:
 
 CPZ_Loop0A:
 	dc.b	nB5, $12, nRst, $06, nB5, $12, nRst, $06, nCs6, $0C, nRst, $24
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $04, CPZ_Loop0A
 	smpsModSet          $0C, $01, $05, $04
 
 CPZ_Loop0B:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $02, CPZ_Loop0B
 	smpsSetvoice        $05
 	smpsAlterVol        $F8
@@ -291,15 +289,15 @@ CPZ_Loop05:
 	dc.b	nE2, $0C, nE3, $06, nRst, nEb3, nRst, nE3, nEb2, nRst, nEb2, nEb3
 	dc.b	nRst, nCs3, nRst, nEb3, $0C
 	smpsLoop            $01, $04, CPZ_Loop05
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsPan             panCenter, $00
 
 CPZ_Loop06:
 	smpsCall            CPZ_Call03
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $03, CPZ_Loop06
 	smpsPan             panRight, $00
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsSetvoice        $05
 	smpsAlterVol        $F8
 
@@ -316,7 +314,7 @@ CPZ_FM2:
 	smpsSetvoice        $04
 
 CPZ_Loop02:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $03, CPZ_Loop02
 	dc.b	nFs2, $06, nEb2, $24, nRst, $06, nE2, $04, nRst, $08, nE2, $0C
 	dc.b	nF2, $04, nRst, $08, nF2, $0C, nFs2, $04, nRst, $08, nFs2, $0C

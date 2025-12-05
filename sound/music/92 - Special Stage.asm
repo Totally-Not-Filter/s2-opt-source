@@ -43,11 +43,11 @@ SpecStg_FM2:
 	smpsPan             panLeft, $00
 	smpsModSet          $06, $01, $02, $04
 	smpsCall            SpecStg_Call00
-	dc.b	nAb5, $06, nRst, $30, nRst, $2A
+	dc.b	nAb5, $06, nRst, $5A
 	smpsAlterPitch      $0C
 	smpsAlterVol        $F6
 	smpsPan             panCenter, $00
-	dc.b	nRst, $30, $30
+	dc.b	nRst, $60
 	smpsSetvoice        $05
 	dc.b	nG4, $12, nAb4, nA4, $0C, nBb4, $12, nB4, nC5, $0C, nB4, $12
 	dc.b	nC5, nCs5, $0C, nC5, $12, nCs5, nD5, $0C
@@ -62,10 +62,10 @@ SpecStg_Loop0A:
 	smpsModSet          $18, $01, $10, $04
 	dc.b	nFs5, nE5, nD5, $30, smpsNoAttack, $30
 	smpsModSet          $01, $01, $08, $04
-	dc.b	nRst, $30, nRst, nE5, $18, nAb5, $0C, nB5, $18, nA5, nAb5, $0C
+	dc.b	nRst, $60, nE5, $18, nAb5, $0C, nB5, $18, nA5, nAb5, $0C
 	dc.b	smpsNoAttack, nAb5, nFs5, $18, nE5, nAb5, $0C
 	smpsModSet          $18, $01, $10, $04
-	dc.b	nFs5, nE5, nD6, $30, smpsNoAttack, $30, nRst, $30, nRst
+	dc.b	nFs5, nE5, nD6, $30, smpsNoAttack, $30, nRst, $60
 	smpsLoop            $00, $02, SpecStg_Loop0A
 	smpsAlterVol        $FE
 	smpsPan             panRight, $00
@@ -114,12 +114,12 @@ SpecStg_FM3:
 	smpsPan             panCenter, $00
 	smpsSetvoice        $05
 	smpsAlterNote       $00
-	dc.b	nAb5, $06, nRst, $30, nRst, $2A, nRst, $30, nRst, nG4, $12, nAb4
+	dc.b	nAb5, $06, nRst, $5A, nRst, $60, nG4, $12, nAb4
 	dc.b	nA4, $0C, nBb4, $12, nB4, nC5, $0C, nB4, $12, nC5, nCs5, $0C
 	dc.b	nC5, $12, nCs5, nD5, $0C
 
 SpecStg_Loop08:
-	dc.b	nRst, $30, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst
 
 SpecStg_Loop07:
 	smpsPan             panRight, $00
@@ -127,7 +127,7 @@ SpecStg_Loop07:
 	dc.b	$12, nAb4, $06, nRst, $18
 	smpsLoop            $01, $02, SpecStg_Loop07
 	smpsPan             panCenter, $00
-	dc.b	nRst, $30, nRst, nRst, nRst, nAb4, $06, nRst, $0C, $06, nRst
+	dc.b	nRst, $60, nRst, nAb4, $06, nRst, $0C, $06, nRst
 	dc.b	$0C, nAb4, $06, nRst, nAb4, nRst, $0C, $06, nRst, $0C, nAb4
 	dc.b	$06, nRst, nAb4, nRst, $0C, $06, nRst, $0C, nAb4, $06, nRst
 	dc.b	nAb4, nRst, $2A
@@ -161,13 +161,13 @@ SpecStg_FM4:
 	dc.b	nAb4, $12, nA4, nBb4, $0C
 
 SpecStg_Loop05:
-	dc.b	nRst, $30, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst
 
 SpecStg_Loop04:
 	dc.b	nE4, $06, nRst, $0C, nE4, $06, nRst, $0C, nE4, $06, nRst, nD4
 	dc.b	$12, nE4, $06, nRst, $18
 	smpsLoop            $01, $02, SpecStg_Loop04
-	dc.b	nRst, $30, nRst, nRst, nRst, nE4, $06, nRst, $0C, $06, nRst
+	dc.b	nRst, $60, nRst, nE4, $06, nRst, $0C, $06, nRst
 	dc.b	$0C, nE4, $06, nRst, nE4, nRst, $0C, $06, nRst, $0C, nE4
 	dc.b	$06, nRst, nE4, nRst, $0C, $06, nRst, $0C, nE4, $06, nRst
 	dc.b	nE4, nRst, $2A
@@ -209,8 +209,7 @@ SpecStg_Loop03:
 
 ; PSG1 Data
 SpecStg_PSG1:
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
-	dc.b	nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst
 
 SpecStg_Loop11:
 	dc.b	nE5, $18, nAb5, $0C, nB5, $18, nA5, nAb5, $0C, smpsNoAttack, nAb5, nFs5
@@ -219,7 +218,7 @@ SpecStg_Loop11:
 	dc.b	nFs5, $18, nE5, nAb5, $0C, nFs5, nE5, nD6, $30, smpsNoAttack, $30, nRst
 	dc.b	$30, nRst
 	smpsLoop            $00, $02, SpecStg_Loop11
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst, nRst
 	smpsPSGAlterVol     $FF
 	smpsAlterPitch      $F4
 	dc.b	nB6, $06, nRst, nB6, nRst, nCs7, nB6, $12, nE7, $0C, nRst, nE7
@@ -234,8 +233,7 @@ SpecStg_Loop11:
 ; PSG2 Data
 SpecStg_PSG2:
 	smpsAlterNote       $FF
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst, nRst
-	dc.b	nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst, nRst, nRst, nRst, nRst
 
 SpecStg_Jump00:
 	dc.b	nRst, $12, nE5, $18, nAb5, $0C, nB5, $18, nA5, nAb5, $0C, smpsNoAttack
@@ -261,7 +259,7 @@ SpecStg_Jump00:
 
 ; DAC Data
 SpecStg_DAC:
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst
 
 SpecStg_Loop00:
 	dc.b	dKick, $18, dKick, dKick, dKick, $0C, dSnare
@@ -286,7 +284,7 @@ SpecStg_PSG3:
 	smpsPSGform         $E7
 	smpsPSGvoice        fTone_04
 	smpsNoteFill        $03
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst
 
 SpecStg_Loop0D:
 	dc.b	nMaxPSG, $0C, $06, nMaxPSG, nMaxPSG, nMaxPSG, $0C, nMaxPSG, nMaxPSG, $06, nMaxPSG, nMaxPSG

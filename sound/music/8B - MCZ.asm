@@ -113,7 +113,7 @@ MCZ_Call02:
 MCZ_FM1:
 	smpsSetvoice        $02
 	smpsModSet          $18, $01, $0A, $04
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 
 MCZ_Jump02:
 	smpsCall            MCZ_Call01
@@ -141,21 +141,21 @@ MCZ_Jump02:
 	dc.b	nRst, $0C
 
 MCZ_Loop04:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $09, MCZ_Loop04
 	smpsCall            MCZ_Call03
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsAlterPitch      $03
 	smpsCall            MCZ_Call04
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsAlterPitch      $FD
 	smpsCall            MCZ_Call03
-	dc.b	nRst, $30, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst
 	smpsJump            MCZ_Jump02
 
 ; PSG1 Data
 MCZ_PSG1:
-	dc.b	nRst, $04, nRst, $30, nRst
+	dc.b	nRst, $64
 
 MCZ_Jump05:
 	smpsCall            MCZ_Call01
@@ -183,24 +183,24 @@ MCZ_Jump05:
 	dc.b	nRst, $0C
 
 MCZ_Loop08:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $09, MCZ_Loop08
 	smpsCall            MCZ_Call03
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsAlterPitch      $03
 	smpsCall            MCZ_Call04
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsAlterPitch      $FD
 	smpsCall            MCZ_Call03
-	dc.b	nRst, $30, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst
 	smpsJump            MCZ_Jump05
 
 ; PSG2 Data
 MCZ_PSG2:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 
 MCZ_Loop06:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, MCZ_Loop06
 	dc.b	nA5, $0C, nAb5, nG5, $08, nAb5, $04, nG5, $08, nFs5, $04, nF5
 	dc.b	$08, $04, nE5, $0C, nEb5, $08, nD5, $10, nC5, $0C, nC5, nB4
@@ -231,7 +231,7 @@ MCZ_FM3:
 	smpsSetvoice        $00
 
 MCZ_Loop02:
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 	smpsLoop            $00, $08, MCZ_Loop02
 	dc.b	nA5, $0C, nAb5, nG5, $08, nAb5, $04, nG5, $08, nFs5, $04, nF5
 	dc.b	$08, $04, nE5, $0C, nEb5, $08, nD5, $10, nC5, $0C, nC5, nB4
@@ -259,7 +259,7 @@ MCZ_Loop03:
 ; FM2 Data
 MCZ_FM2:
 	smpsSetvoice        $05
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 
 MCZ_Loop01:
 	dc.b	nA2, $0C, nA3, nG3, $08, nA3, $04, nG3, $08, nE3, $04, nD3
@@ -345,7 +345,7 @@ MCZ_Loop00:
 ; PSG3 Data
 MCZ_PSG3:
 	smpsPSGform         $E7
-	dc.b	nRst, $30, nRst
+	dc.b	nRst, $60
 
 MCZ_Jump04:
 	dc.b	nMaxPSG, $0C, $08, $04

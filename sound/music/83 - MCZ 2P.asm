@@ -77,7 +77,7 @@ MCZ_2p_PSG1:
 	dc.b	nRst, $1B
 
 MCZ_2p_Jump08:
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst, nRst
 	smpsCall            MCZ_2p_Call03
 	dc.b	$24, nB4, nD5, $18, smpsNoAttack, $30, smpsNoAttack, $30, nB5, $24, nA5, nG5
 	dc.b	$18, nA5, $24, nG5, nE5, $18, nE5, nF5, $0C, nD5, $30, smpsNoAttack
@@ -93,7 +93,7 @@ MCZ_2p_PSG3:
 	dc.b	nRst, $18
 
 MCZ_2p_Jump07:
-	dc.b	nRst, $30, nRst, nRst, nRst, nRst, nRst, nRst, nRst
+	dc.b	nRst, $60, nRst, nRst, nRst
 	smpsCall            MCZ_2p_Call03
 	dc.b	$24, nB4, nD5, $18, smpsNoAttack, $30, smpsNoAttack, $30
 	smpsPSGAlterVolS2   $FE

@@ -1014,9 +1014,6 @@ Credits_Loop41:
 	smpsPSGAlterVol     $FC
 	smpsJump            Credits_Jump00
 
-	; Unreachable
-	smpsStop
-
 Credits_Call27:
 	dc.b	nRst, $0C, nC5, $06, $12, $18, nG5, $06, $12, $0C, nRst, nF5
 	dc.b	$06, $12, $18, nG5, $06, $12, $0C
@@ -1348,13 +1345,6 @@ Credits_Call02:
 	dc.b	dKick, $08, $0C, $04, dSnare, $0C, dKick, $08, $0C, dSnare, $04, dKick
 	dc.b	$0C, dSnare, dKick, dKick, $08, $0C, $04, dSnare, $0C, dKick, $08, $0C
 	dc.b	dSnare, $04, dKick, $0C, dSnare, dSnare, $08, $04
-	smpsReturn
-
-; Unused
-;Credits_CallUnk:
-	dc.b	dKick, $06, nRst, $03, dKick, dKick, $06, dSnare, dKick, $06, nRst, $03
-	dc.b	dKick, dKick, $06, dSnare, $03, dSnare, dKick, $06, nRst, $03, dKick, dKick
-	dc.b	$06, dSnare
 	smpsReturn
 
 Credits_Voices:
