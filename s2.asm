@@ -71,6 +71,8 @@ SonicDriverVer = 2 ; Tell SMPS2ASM that we are targetting Sonic 2's sound driver
 SonicMappingsVer := 2
 	include "mappings/MapMacros.asm"
 
+	include	"errorhandler\Debugger.asm"
+
 ; >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 ; start of ROM
 
@@ -81,16 +83,16 @@ StartOfRom:
 Vectors:
 	dc.l System_Stack	; Initial stack pointer value
 	dc.l EntryPoint		; Start of program
-	dc.l ErrorTrap		; Bus error
-	dc.l ErrorTrap		; Address error (4)
-	dc.l ErrorTrap		; Illegal instruction
-	dc.l ErrorTrap		; Division by zero
-	dc.l ErrorTrap		; CHK exception
-	dc.l ErrorTrap		; TRAPV exception (8)
-	dc.l ErrorTrap		; Privilege violation
-	dc.l ErrorTrap		; TRACE exception
-	dc.l ErrorTrap		; Line-A emulator
-	dc.l ErrorTrap		; Line-F emulator (12)
+	dc.l BusError		; Bus error
+	dc.l AddressError	; Address error (4)
+	dc.l IllegalInstr	; Illegal instruction
+	dc.l ZeroDivide		; Division by zero
+	dc.l ChkInstr		; CHK exception
+	dc.l TrapvInstr		; TRAPV exception (8)
+	dc.l PrivilegeViol	; Privilege violation
+	dc.l Trace			; TRACE exception
+	dc.l Line1010Emu	; Line-A emulator
+	dc.l Line1111Emu	; Line-F emulator (12)
 	dc.l ErrorTrap		; Unused (reserved)
 	dc.l ErrorTrap		; Unused (reserved)
 	dc.l ErrorTrap		; Unused (reserved)
@@ -492,7 +494,7 @@ Vint_Level:
 	move.w	(Hint_counter_reserve).w,(a5)
 	move.w	#$8200|(VRAM_Plane_A_Name_Table/$400),(VDP_control_port).l	; Set scroll A PNT base to $C000
 
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
     if fixBugs
 	tst.w	(Two_player_mode).w
@@ -510,11 +512,11 @@ Vint_Level:
 	; Upload the front buffer.
 	tst.b	(Current_sprite_table_page).w
 	bne.s	+
-	dma68kToVDP Sprite_Table_Alternate,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table_Alternate,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	bra.s	++
 +
     endif
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 +
 
 	bsr.w	ProcessDMAQueue
@@ -569,17 +571,17 @@ Vint_S2SS:
 	bsr.w	SSSet_VScroll
 
 	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 
 	tst.b	(SS_Alternate_HorizScroll_Buf).w
 	beq.s	loc_906
 
-	dma68kToVDP SS_Horiz_Scroll_Buf_2,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined SS_Horiz_Scroll_Buf_2,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 	bra.s	loc_92A
 ; ---------------------------------------------------------------------------
 
 loc_906:
-	dma68kToVDP SS_Horiz_Scroll_Buf_1,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined SS_Horiz_Scroll_Buf_1,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
 loc_92A:
 	tst.b	(SSTrack_Orientation).w		; Is the current track frame flipped?
@@ -738,7 +740,7 @@ loc_BB2:
 loc_BD6:
 	move.w	(Hint_counter_reserve).w,(a5)
 
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
     if fixBugs
 	tst.w	(Two_player_mode).w
@@ -756,11 +758,11 @@ loc_BD6:
 	; Upload the front buffer.
 	tst.b	(Current_sprite_table_page).w
 	bne.s	+
-	dma68kToVDP Sprite_Table_Alternate,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table_Alternate,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 	bra.s	++
 +
     endif
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
 +
 	bsr.w	ProcessDMAQueue
 	jsr	(DrawLevelTitleCard).l
@@ -783,8 +785,8 @@ Vint_Ending:
 	bsr.w	ReadJoypads
 
 	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
 	bsr.w	ProcessDMAQueue
 	movem.l	(Camera_RAM).w,d0-d7
@@ -828,8 +830,8 @@ Vint_Menu:
 	bsr.w	ReadJoypads
 
 	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 
 	bsr.w	ProcessDMAQueue
 
@@ -849,15 +851,15 @@ Do_ControllerPal:
 	bne.s	loc_EDA
 
 	dma68kToVDP Normal_palette,$0000,palette_line_size*4,CRAM
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 	rts
 ; ---------------------------------------------------------------------------
 
 loc_EDA:
 	dma68kToVDP Underwater_palette,$0000,palette_line_size*4,CRAM
-	dma68kToVDP Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
-	dma68kToVDP Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
+	dma68kToVDPsrcdefined Sprite_Table,VRAM_Sprite_Attribute_Table,VRAM_Sprite_Attribute_Table_Size,VRAM
+	dma68kToVDPsrcdefined Horiz_Scroll_Buf,VRAM_Horiz_Scroll_Table,VRAM_Horiz_Scroll_Table_Size,VRAM
 	rts
 ; End of function sub_E98
 ; ||||||||||||||| E N D   O F   V - I N T |||||||||||||||||||||||||||||||||||
@@ -11999,24 +12001,24 @@ level_select_cheat:
 	; 17th September 1965, the birthdate of one of Sonic 2's developers,
 	; Yuji Naka.
 	dc.b $19, $65,   9, $17,   0
-	rev02even
+	even
 ; byte_97B7
 continues_cheat:
 	; November 24th, which was Sonic 2's release date in the EU and US.
 	dc.b   1,   1,   2,   4,   0
-	rev02even
+	even
 debug_cheat:
 	; 24th November 1992 (also known as "Sonic 2sday"), which was
 	; Sonic 2's release date in the EU and US.
 	dc.b   1,   9,   9,   2,   1,   1,   2,   4,   0
-	rev02even
+	even
 ; byte_97C5
 super_sonic_cheat:
 	; Book of Genesis, 41:26, which makes frequent reference to the
 	; number 7. 7 happens to be the number of Chaos Emeralds.
 	; The Mega Drive is known as the Genesis in the US.
 	dc.b   4,   1,   2,   6,   0
-	rev02even
+	even
 
 	; set the character set for menu text
 	charset '@',"\27\30\31\32\33\34\35\36\37\38\39\40\41\42\43\44\45\46\47\48\49\50\51\52\53\54\55"
@@ -12041,6 +12043,8 @@ TextOptScr_SoundTest:		menutxt	"*  SOUND TEST   *"	; byte_985E:
 TextOptScr_0:			menutxt	"      00       "	; byte_9870:
 
 	charset ; reset character set
+	
+	even
 
 ; level select picture palettes
 ; byte_9880:
@@ -12237,8 +12241,8 @@ EndgameCredits:
 	clearRAM Misc_Variables,Misc_Variables_End
 	clearRAM Camera_RAM,Camera_RAM_End
 
-	clr.b	(Screen_Shaking_Flag).w
 	moveq	#0,d0
+	move.b	d0,(Screen_Shaking_Flag).w
 	move.w	d0,(Level_Inactive_flag).w
 	move.w	d0,(Level_frame_counter).w
 	move.w	d0,(Camera_X_pos).w
@@ -12270,7 +12274,7 @@ EndgameCredits:
 	jsr	(NemDec).w
 	clr.w	(CreditsScreenIndex).w
 -
-	jsrto	JmpTo_ClearScreen
+	jsr	(ClearScreen).w
 	bsr.w	ShowCreditsScreen
 	bsr.w	Pal_FadeFromBlack
 
@@ -14060,13 +14064,15 @@ InitCam_OOZ:
 	lsr.w	#3,d0
 	addi.w	#$50,d0
 	move.w	d0,(Camera_BG_Y_pos).w
-	clr.l	(Camera_BG_X_pos).w
+	moveq	#0,d0
+	move.l	d0,(Camera_BG_X_pos).w
 	rts
 ; ===========================================================================
 ;loc_C332:
 InitCam_MCZ:
-	clr.l	(Camera_BG_X_pos).w
-	clr.l	(Camera_BG_X_pos_P2).w
+	moveq	#0,d1
+	move.l	d1,(Camera_BG_X_pos).w
+	move.l	d1,(Camera_BG_X_pos_P2).w
 	tst.b	(Current_Act).w
 	bne.s	+
 	divu.w	#3,d0
@@ -14120,10 +14126,11 @@ loc_C3A6:
 	asr.l	#8,d1
 	move.w	d1,(Camera_BG_X_pos).w
 	move.w	d1,(Camera_ARZ_BG_X_pos).w
-	clr.w	(Camera_BG_X_pos+2).w
-	clr.w	(Camera_ARZ_BG_X_pos+2).w
-	clr.l	(Camera_BG2_Y_pos).w
-	clr.l	(Camera_BG3_Y_pos).w
+	moveq	#0,d1
+	move.w	d1,(Camera_BG_X_pos+2).w
+	move.w	d1,(Camera_ARZ_BG_X_pos+2).w
+	move.l	d1,(Camera_BG2_Y_pos).w
+	move.l	d1,(Camera_BG3_Y_pos).w
 	rts
 ; ===========================================================================
 ;loc_C3C6:
@@ -16070,7 +16077,7 @@ SwScrl_CNZ_2P:
 	; heights, with each row getting its own scroll value.
 	; This is used to create an elaborate parallax effect.
 	move.w	(Camera_X_pos).w,d2
-	bsr.w	SwScrl_CNZ_GenerateScrollValues
+	bsr.s	SwScrl_CNZ_GenerateScrollValues
 
 	; Use the list of row scroll values and a list of row heights to fill
 	; 'Horiz_Scroll_Buf'.
@@ -88135,6 +88142,21 @@ Sound6F:	include "sound/sfx/EF - Large Laser.asm"
 Sound70:	include "sound/sfx/F0 - Oil Slide.asm"
 
 	finishBank
+
+; ==============================================================
+; --------------------------------------------------------------
+; Debugging modules
+; --------------------------------------------------------------
+	even
+	include	"errorhandler\ErrorHandler.asm"
+
+; --------------------------------------------------------------
+; WARNING!
+;	DO NOT put any data from now on! DO NOT use ROM padding!
+;	Symbol data should be appended here after ROM is compiled
+;	by ConvSym utility, otherwise debugger modules won't be able
+;	to resolve symbol names.
+; --------------------------------------------------------------
 
 ; end of 'ROM'
 	if padToPowerOfTwo && (*-StartOfRom)&(*-StartOfRom-1)
